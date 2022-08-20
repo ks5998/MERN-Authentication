@@ -45,9 +45,11 @@ router.post('/login', async (req, res) => {
 
     const matchPassword = await bcrypt.compare(password, user.password)
     if (matchPassword) {
-        return res.status(200).json({ msg: 'logged in successfully'})
+        const userSession = { email: user.email }
+        req.session.user = userSession
+        return res.status(200).json({ msg: 'logged in successfully', userSession })
     } else {
-        return res.status(400).json({ msg: 'invalid credentials'})
+        return res.status(400).json({ msg: 'invalid credentials'}) 
     }
 });
 
